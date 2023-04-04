@@ -15,8 +15,15 @@ http
       });
     } else {
       fs.readFile(__dirname + "/" + filePath, "utf8", (err, data) => {
-        if (err) console.error(err);
-        else {
+        if (err) {
+          if ((err.code = "ENOENT")) {
+            fs.readFile(__dirname + "/404.html", "utf8", (err, data) => {
+              res.setHeader("Content-Type", "text/html");
+              res.writeHead(200);
+              res.end(data);
+            });
+          }
+        } else {
           res.setHeader("Content-Type", "text/html");
           res.writeHead(200);
           res.end(data);
